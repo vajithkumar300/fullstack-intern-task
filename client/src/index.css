@@ -45,3 +45,21 @@ html.dark {
 /* .bg-nav {
   background-color: var(--nav-bg);
 } */
+
+@layer utilities {
+  @keyframes slideDown {
+    0%   { transform: translateY(-8px); opacity: 0; }
+    100% { transform: translateY(0);     opacity: 1; }
+  }
+  @keyframes slideUp {
+    0%   { transform: translateY(0);     opacity: 1; }
+    100% { transform: translateY(-8px);  opacity: 0; }
+  }
+
+  .animate-slideDown {
+    animation: slideDown 320ms cubic-bezier(.22,.9,.26,1) both;
+  }
+  .animate-slideUp {
+    animation: slideUp 220ms cubic-bezier(.22,.9,.26,1) both;
+  }
+}

@@ -1,4 +1,5 @@
 import { Template } from "../models/Template.js";
+import { v2 as cloudinary } from "cloudinary";
 
 export const listTemplates = async (req, res) => {
   try {
@@ -45,23 +46,60 @@ export const createTemplate = async (req, res) => {
 // Admin: delete or update could be added similarly
 export const updateTemplate = async (req, res) => {
   try {
-    console.log("check", req.body, req.params.id);
     
-    const { name, description, category, thumbnail_url } = req.body
+
+    const { name, description, category } = req.body;
+    let thumbnail_url = req.body.thumbnail_url;
+
+    // ✅ If a new image file is uploaded, upload to Cloudinary
+    if (req.file) {
+      const result = await cloudinary.uploader.upload_stream(
+        { folder: "templates" },
+        async (error, result) => {
+          if (error) {
+            console.error("Cloudinary upload failed:", error);
+            return res.status(500).json({ message: "Image upload failed" });
+          }
+
+          thumbnail_url = result.secure_url;
+
+          const updated = await Template.findByIdAndUpdate(
+            req.params.id,
+            { name, description, category, thumbnail_url },
+            { new: true }
+          );
+
+          if (!updated) {
+            return res.status(404).json({ message: "Template not found" });
+          }
+
+          return res.json(updated);
+        }
+      );
+
+      // ⚠️ Write file buffer to Cloudinary stream
+      result.end(req.file.buffer);
+      return; // Stop further execution
+    }
+
+    // ✅ No new image, just update text fields
     const updated = await Template.findByIdAndUpdate(
       req.params.id,
       { name, description, category, thumbnail_url },
       { new: true }
-    )
-    // console.log(updated, name);
-    
-    if (!updated) return res.status(404).json({ message: 'Template not found' })
-    res.json(updated)
+    );
+
+    if (!updated) {
+      return res.status(404).json({ message: "Template not found" });
+    }
+
+    res.json(updated);
   } catch (err) {
-    console.error(err)
-    res.status(500).json({ message: 'Server error' })
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
-}
+};
+
 
 export const deleteTemplate = async (req, res) => {
   try {

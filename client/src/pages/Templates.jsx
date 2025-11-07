@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchTemplates, fetchFavorites, addFavorite, removeFavorite } from '../store/slices/templatesSlice'
 import TemplateCard from '../components/TemplateCard'
+import { toast } from 'react-toastify'
 // import Navbar from '../components/Navbar'
 
 export default function Templates() {
@@ -32,7 +33,7 @@ export default function Templates() {
     }
 
     const handleFavoriteToggle = async (template) => {
-        if (!user) return alert('Login to favorite templates')
+        if (!user) return toast.warning('Login to favorite templates')
         if (isFavorited(template)) {
             await dispatch(removeFavorite(template._id))
             dispatch(fetchFavorites())
