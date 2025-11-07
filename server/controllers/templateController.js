@@ -9,7 +9,7 @@ export const listTemplates = async (req, res) => {
     if (search) filter.name = { $regex: search, $options: 'i' };
 
     const templates = await Template.find(filter).sort({ createdAt: -1 });
-    res.json(templates);
+    res.status(200).json(templates);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
@@ -18,12 +18,19 @@ export const listTemplates = async (req, res) => {
 
 export const getTemplate = async (req, res) => {
   try {
-    const t = await Template.findById(req.params.id);
-    if (!t) return res.status(404).json({ message: 'Template not found' });
-    res.json(t);
+    const template = await Template.findById(req.params.id);
+    if (!template) return res.status(404).json({ message: "Template not found" });
+
+    // Fetch related templates by category (excluding current template)
+    const relatedTemplates = await Template.find({
+      category: template.category,
+      _id: { $ne: template._id },
+    }).limit(6); // you can adjust the limit
+
+    res.status(200).json({ template, relatedTemplates });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 };
 

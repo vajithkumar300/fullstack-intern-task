@@ -10,35 +10,37 @@ import Login from "./pages/Login";
 import FavoritesPage from "./pages/Favorites";
 import AdminDashboard from "./pages/AdminDashboard";
 import Loader from "./components/Loader";
+import TemplateDetails from "./pages/TemplateDetails";
 
 
 export default function App() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const loading = useSelector(s => s.templates.loading);
-  
+
 
   useEffect(() => {
     dispatch(fetchMe());
   }, [dispatch]);
 
-  
+
 
   // if(loading) <Loader />
 
-return (
-  <div>
+  return (
+    <div>
       <Navbar user={user} />
       <main className="mt-16">
-        <Routes> 
-        <Route path="/" element={<Navigate to="/templates" replace />} />
-        <Route path="/templates" element={<Templates />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/favorites" element={<FavoritesPage />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="*" element={<div className="p-6">Page not found</div>} />
-      </Routes>
+        <Routes>
+          <Route path="/" element={<Navigate to="/templates" replace />} />
+          <Route path="/templates" element={<Templates />} />
+          <Route path="/templates/:id" element={<TemplateDetails />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="*" element={<div className="p-6">Page not found</div>} />
+        </Routes>
       </main>
     </div>
   );

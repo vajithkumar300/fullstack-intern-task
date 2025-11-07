@@ -66,11 +66,11 @@ export default function Templates() {
                         className="p-2 border rounded card-bg"
                     >
                         <option value="">All</option>
-                        <option value="portfolio">Portfolio</option>
-                        <option value="ecommerce">E-commerce</option>
-                        <option value="saas">SaaS</option>
                         <option value="blog">Blog</option>
                         <option value="dashboard">Dashboard</option>
+                        <option value="saas">SaaS</option>
+                        <option value="portfolio">Portfolio</option>
+                        <option value="ecommerce">E-commerce</option>
                     </select>
                 </div>
                 {templates.length ?

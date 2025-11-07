@@ -26,7 +26,7 @@ export const fetchFavorites = createAsyncThunk('templates/fetchFavorites', async
 export const addFavorite = createAsyncThunk('templates/addFavorite', async (templateId, { rejectWithValue }) => {
     try {
         await api.post(`/favorites/${templateId}`)
-        toast.success('Added to favorites')
+        toast.success('Added to favorites') 
         return templateId
     } catch (err) {
         return rejectWithValue(err.response?.data?.message || 'Failed to add favorite')
@@ -103,17 +103,36 @@ export const updateTemplate = createAsyncThunk('templates/update', async ({ id, 
   }
 });
 
+// ---- Fetch Single Template with Related Templates ----
+export const fetchTemplateById = createAsyncThunk(
+  'templates/fetchById',
+  async (id, { rejectWithValue }) => {
+    try {
+        
+      const res = await api.get(`/templates/${id}`);
+      
+      // Expected response: { template: {...}, relatedTemplates: [...] }
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || 'Failed to load template');
+    }
+  }
+);
+
 
 // ---- Slice ----
 const templatesSlice = createSlice({
   name: 'templates',
   initialState: {
-    items: [],
-    favorites: [],
-    status: 'idle',      // idle | loading | succeeded | failed
-    loading: false,      // boolean for UI loader
-    error: null
-  },
+  items: [],
+  favorites: [],
+  currentTemplate: null, // ⬅ for single template
+  relatedTemplates: [],  // ⬅ for related templates
+  status: 'idle',
+  loading: false,
+  error: null
+},
+
   reducers: {},
   extraReducers(builder) {
     builder
@@ -162,6 +181,27 @@ const templatesSlice = createSlice({
         const index = state.items.findIndex(t => t._id === action.payload._id)
         if (index !== -1) state.items[index] = action.payload
       })
+       .addCase(fetchTemplateById.pending, (state) => {
+  state.status = 'loading';
+  state.loading = true;
+  state.error = null;
+  state.currentTemplate = null;
+  state.relatedTemplates = [];
+})
+.addCase(fetchTemplateById.fulfilled, (state, action) => {
+  state.status = 'succeeded';
+  state.currentTemplate = action.payload; // <- use payload directly
+  state.relatedTemplates = []; // optionally fetch related templates later
+  state.loading = false;
+})
+.addCase(fetchTemplateById.rejected, (state, action) => {
+  state.status = 'failed';
+  state.error = action.payload;
+  state.loading = false;
+  state.currentTemplate = null;
+  state.relatedTemplates = [];
+})
+
   }
 })
 
