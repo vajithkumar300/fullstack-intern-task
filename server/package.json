@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
+    "build": "next build",
     "dev": "nodemon server.js",
     "seed": "node seed/seedTemplates.js"
   },
