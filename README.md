@@ -1,7 +1,8 @@
 # Mini SaaS Template Store
 
 **Author:** Ajith Kumar V  
-**contact:** vajithkumar300@gmail.com  / 9025318805  
+**Contact:** vajithkumar300@gmail.com  / 9025318805  
+**Live link:** https://fullstack-intern-task-f.vercel.app/  
 **Role:** Full Stack Web Developer Intern  
 
 ---
@@ -62,13 +63,13 @@ COOKIE_SECURE=true
 CLOUDINARY_CLOUD_NAME=<Cloudinary Name>
 CLOUDINARY_API_KEY=<Cloudinary Key>
 CLOUDINARY_API_SECRET=<Cloudinary Secret>
+
 Run
 Start backend:
-
 cd server
 npm run dev
-Start frontend:
 
+Start frontend:
 cd client
 npm run dev
 Usage
