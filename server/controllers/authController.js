@@ -69,7 +69,7 @@ export const login = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  res.clearCookie('token', { httpOnly: true, sameSite: 'lax', secure: process.env.COOKIE_SECURE === 'true' });
+  res.clearCookie('token', { httpOnly: true, sameSite: process.env.COOKIE_SECURE === 'true' ? 'none' : 'lax', secure: process.env.COOKIE_SECURE === 'true', });
   res.json({ message: 'Logged out' });
 };
 

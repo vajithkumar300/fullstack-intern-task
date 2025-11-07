@@ -156,7 +156,7 @@ export default function AdminDashboard() {
           <button
             type="submit"
             disabled={loading}
-            className={`col-span-full px-4 py-2 rounded text-white transition ${
+            className={`col-span-full px-4 cursor-pointer py-2 rounded text-white transition ${
               loading
                 ? "bg-green-400 cursor-not-allowed"
                 : "bg-green-600 hover:bg-green-700"
