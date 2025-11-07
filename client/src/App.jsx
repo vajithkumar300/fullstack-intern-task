@@ -9,18 +9,25 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import FavoritesPage from "./pages/Favorites";
 import AdminDashboard from "./pages/AdminDashboard";
+import Loader from "./components/Loader";
 
 
 export default function App() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const loading = useSelector(s => s.templates.loading);
+  
 
   useEffect(() => {
     dispatch(fetchMe());
   }, [dispatch]);
 
-  return (
-    <div>
+  
+
+  // if(loading) <Loader />
+
+return (
+  <div>
       <Navbar user={user} />
       <main className="mt-16">
         <Routes> 

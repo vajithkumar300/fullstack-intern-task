@@ -14,7 +14,7 @@ initTheme() // set initial theme from localStorage
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
+      <BrowserRouter basename="/">
         <App />
         <ToastContainer position="top-right" />
       </BrowserRouter>

@@ -106,39 +106,63 @@ export const updateTemplate = createAsyncThunk('templates/update', async ({ id, 
 
 // ---- Slice ----
 const templatesSlice = createSlice({
-    name: 'templates',
-    initialState: {
-        items: [],
-        favorites: [],
-        status: 'idle',
-        error: null
-    },
-    reducers: {},
-    extraReducers(builder) {
-        builder
-            .addCase(fetchTemplates.fulfilled, (state, action) => {
-                state.items = action.payload
-            })
-            .addCase(fetchFavorites.fulfilled, (state, action) => {
-                state.favorites = action.payload
-            })
-            .addCase(addFavorite.fulfilled, (state, action) => {
-                state.favorites.push(action.payload)
-            })
-            .addCase(removeFavorite.fulfilled, (state, action) => {
-                state.favorites = state.favorites.filter(f => (f._id ? f._id !== action.payload : f !== action.payload))
-            })
-            .addCase(createTemplate.fulfilled, (state, action) => {
-                state.items.unshift(action.payload)
-            })
-            .addCase(deleteTemplate.fulfilled, (state, action) => {
-                state.items = state.items.filter(t => t._id !== action.payload)
-            })
-            .addCase(updateTemplate.fulfilled, (state, action) => {
-                const index = state.items.findIndex(t => t._id === action.payload._id)
-                if (index !== -1) state.items[index] = action.payload
-            })
-    }
+  name: 'templates',
+  initialState: {
+    items: [],
+    favorites: [],
+    status: 'idle',      // idle | loading | succeeded | failed
+    loading: false,      // boolean for UI loader
+    error: null
+  },
+  reducers: {},
+  extraReducers(builder) {
+    builder
+      // ---- Fetch Templates ----
+      .addCase(fetchTemplates.pending, (state) => {
+        state.status = 'loading'
+        state.loading = true
+        state.error = null
+      })
+      .addCase(fetchTemplates.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.items = action.payload
+        state.loading = false
+      })
+      .addCase(fetchTemplates.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.payload
+        state.loading = false
+      })
+
+      // ---- Favorites ----
+      .addCase(fetchFavorites.fulfilled, (state, action) => {
+        state.favorites = action.payload
+      })
+      .addCase(addFavorite.fulfilled, (state, action) => {
+        state.favorites.push(action.payload)
+      })
+      .addCase(removeFavorite.fulfilled, (state, action) => {
+        state.favorites = state.favorites.filter(
+          f => (f._id ? f._id !== action.payload : f !== action.payload)
+        )
+      })
+
+      // ---- Create Template ----
+      .addCase(createTemplate.fulfilled, (state, action) => {
+        state.items.unshift(action.payload)
+      })
+
+      // ---- Delete Template ----
+      .addCase(deleteTemplate.fulfilled, (state, action) => {
+        state.items = state.items.filter(t => t._id !== action.payload)
+      })
+
+      // ---- Update Template ----
+      .addCase(updateTemplate.fulfilled, (state, action) => {
+        const index = state.items.findIndex(t => t._id === action.payload._id)
+        if (index !== -1) state.items[index] = action.payload
+      })
+  }
 })
 
 export default templatesSlice.reducer

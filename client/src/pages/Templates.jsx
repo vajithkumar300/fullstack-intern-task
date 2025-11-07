@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchTemplates, fetchFavorites, addFavorite, removeFavorite } from '../store/slices/templatesSlice'
 import TemplateCard from '../components/TemplateCard'
 import { toast } from 'react-toastify'
+import Loader from '../components/Loader'
 // import Navbar from '../components/Navbar'
 
 export default function Templates() {
@@ -12,6 +13,7 @@ export default function Templates() {
     const user = useSelector(s => s.auth.user)
     const [search, setSearch] = useState('')
     const [category, setCategory] = useState('')
+    const { items, status, loading } = useSelector(s => s.templates);
 
     useEffect(() => {
         dispatch(fetchTemplates())
@@ -42,6 +44,8 @@ export default function Templates() {
             dispatch(fetchFavorites())
         }
     }
+    
+    // if (loading) return <Loader />;
 
     return (
         <>
