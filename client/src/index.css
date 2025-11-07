@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+/* Light theme default */
+html {
+  background-color: theme('colors.gray.50');
+  color: theme('colors.gray.900');
+}
+
+/* When 'dark' class is present on html (we add/remove this in JS) */
+html.dark {
+  background-color: theme('colors.gray.900');
+  color: theme('colors.gray.100');
+}
+
+/* Smooth color transitions */
+body {
+  @apply transition-colors duration-300;
+}
+
+/* Optional: define a card role to guarantee contrast */
+:root {
+  --card-bg: theme('colors.white');
+  --card-border: theme('colors.gray.400');
+  --muted-text: theme('colors.gray.900');
+  --nav-bg: theme('colors.gray.300');
+}
+
+html.dark {
+  --card-bg: theme('colors.gray.800');
+  --card-border: theme('colors.gray.700');
+  --muted-text: theme('colors.gray.300');
+}
+
+/* Utility class to use card variables if you want */
+.card-bg {
+  background-color: var(--card-bg);
+  border-color: var(--card-border);
+  color: inherit;
+}
+/* .bg-nav {
+  background-color: var(--nav-bg);
+} */
