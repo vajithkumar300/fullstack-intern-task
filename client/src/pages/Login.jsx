@@ -9,9 +9,9 @@ export default function Login() {
     const navigate = useNavigate()
 
     const [form, setForm] = useState({
-        email: 'ajith@gmail.com',
-        password: '12345678',
-        role: 'user'
+        email: 'admin@example.com',
+        password: 'Admin@123',
+        role: 'admin'
     })
     const [loading, setLoading] = useState(false)
 
